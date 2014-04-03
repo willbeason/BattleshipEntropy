@@ -1,0 +1,9 @@
+--------------------------------------------------------------------------------
+                             Battleship Entropy AI
+--------------------------------------------------------------------------------
+
+Welcome to Will Beason's Battleship Entropy AI!
+
+This is a program which lets you simulate or play against intelligent AI which
+use entropic forces to generate strategies. Caution - even the easiest of these
+is very difficult to beat.
