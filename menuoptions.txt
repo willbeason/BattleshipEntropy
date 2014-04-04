@@ -1,3 +1,4 @@
-1) Change settings
-2) Simulate an AI
-3) Quit
+1) Change Settings
+2) Position Ships
+3) Simulate an AI
+4) Quit

@@ -5,6 +5,12 @@ from GreedyAI import *
 from Display import *
 from Options import *
 
+def PositionShips(grid,ships):
+    for ship in ships:
+        print(ship)
+        shipSD = [Sdx(i,[ship]) for i in range(1,11)]
+        PrintBoard(CalcOps(grid,shipSD))
+
 def mainmenu():
     menuops = open('menuoptions.txt','r').read()
     print(menuops)
@@ -15,17 +21,13 @@ def mainmenu():
 
 def main():
     mainchoice = 0
+ 
+    shipposgrid = [['-']*10]*10
+    curgrid = [['-']*10]*10
     
-    readboard = open('startboard.txt','r')
-    griddata = readboard.read().split()
-    curgrid = []
-    
+    print(open('intro.txt','r').read())
 
-    
-    introtext = open('intro.txt','r').read()
-    print(introtext)
-
-    while mainchoice != 3:
+    while mainchoice != 4:
         mainchoice = mainmenu()
 
         if mainchoice == 1:
@@ -34,24 +36,28 @@ def main():
 
         if mainchoice == 2:
             ships = options['ships']
+            PositionShips(shipposgrid,ships)
+            PrintBoard2(shipposgrid)
+            
+        if mainchoice == 3:
+            ships = options['ships']
             
             for i in range(10):
                 curgrid.append(griddata[i*10:i*10+10])
             
-            eSd = []
-            for i in range(1,11): eSd.append(Sdx(i,ships))
+            eSd = [Sdx(i,ships) for i in range(1,11)]
 
             newops = CalcOps(curgrid,eSd)
             PrintBoard(newops)
 
             anothermove = True
             while anothermove:
-                anothermove = 'Y' == input('Play another move? ')
 
                 nextmove = ChooseMove(newops)
                 Shoot(nextmove,curgrid)
                 newops = CalcOps(curgrid,eSd)
-                #PrintBoard(newops)
+                PrintBoard2(curgrid)
+                anothermove = '' == input('Press enter to play a move.')
 
             PrintBoard2(curgrid)
             PrintBoard(newops)
