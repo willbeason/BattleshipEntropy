@@ -10,6 +10,10 @@ def Sdx(dx,ships):
         slist.append(sum)
     return(slist)
 
+def Spos(dx,ship):
+    return([[0+(j-i>=5) for i in range(j)] for j in range(11)])
+        
+
 def RowOps(row,numlist):
     ops = [0]*10
     dx = 0
@@ -39,6 +43,18 @@ def CalcOps(grid,numlist):
     ops = [[x_ops[j][i]+y_ops[j][i] for i in range(10)] for j in range(10)]
     return(ops)
     
+
+def GetPos(grid,numlist):
+    gridT = Transpose(grid)
+    x_ops = []
+    y_ops = []
+    for cur_row in grid:
+        x_ops.append(RowOps(cur_row,numlist))
+    for cur_row in gridT:
+        y_ops.append(RowOps(cur_row,numlist))
+    y_ops = Transpose(y_ops)
+    
+    return(xpos,ypos)
 
 def PrintBoard(opsgrid):
     for row in opsgrid: print(row)

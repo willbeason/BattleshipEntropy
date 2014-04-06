@@ -5,30 +5,41 @@ from GreedyAI import *
 from Display import *
 from Options import *
 
-def CalcPos(grid,shipSD):
-    spotscores = Flatten(CalcOps(grid,shipSD))
-    tot = sum(spotscores)
-    posscore = random.randint(1,tot)
+def GetPos(grid,numlist):
+    gridT = Transpose(grid)
+    x_ops = []
+    y_ops = []
+    for cur_row in grid:
+        x_ops.append(RowOps(cur_row,numlist))
+    xtot = sum(Flatten(x_ops))
+    for cur_row in gridT:
+        y_ops.append(RowOps(cur_row,numlist))
+    y_ops = Transpose(y_ops)
+    ytot = sum(Flatten(y_ops))
 
+    all_ops = Flatten(Flatten([x_ops,y_ops]))
+    posscore = random.randint(0,xtot+ytot)
+    
     position = -1
     possum = 0
     while possum<posscore:
         position += 1
-        possum += spotscores[position]
+        possum += all_ops[position]
 
     xpos = int(position % 10)
-    ypos = int(position / 10)
-    print(xpos,ypos)
-    return(xpos,ypos)
+    ypos = int(position % 100 / 10)
+    horizontal = possum<xtot
+    
+    return(xpos,ypos,horizontal)
 
 def PositionShips(grid,ships):
     for ship in ships:
-        print(ship)
-        shipSD = [Sdx(i,[ship]) for i in range(1,11)]
-        PrintBoard(CalcOps(grid,shipSD))
-        shipcenter = CalcPos(grid,shipSD)
-        print(shipcenter)
-        grid[shipcenter[1]][shipcenter[0]] = ship
+        shipSD = [[0+(j-i>=ship) for i in range(j)] for j in range(1,11)]
+        shipcenter = GetPos(grid,shipSD)
+        if shipcenter[2]:
+            for i in range(ship): grid[shipcenter[1]][shipcenter[0]-i] = ship
+        else:
+            for i in range(ship): grid[shipcenter[1]-i][shipcenter[0]] = ship
 
 def mainmenu():
     menuops = open('menuoptions.txt','r').read()
@@ -39,12 +50,11 @@ def mainmenu():
     return(option)
 
 
-curgrid = [['-']*10]*10
+curgrid = FreshGrid()
+shipposgrid = FreshGrid()
 
 def main():
     mainchoice = 0
- 
-    shipposgrid = [['-']*10]*10
     
     print(open('intro.txt','r').read())
 
@@ -56,6 +66,7 @@ def main():
             ChangeOptions(options)
 
         if mainchoice == 2:
+            shipposgrid = FreshGrid()
             ships = options['ships']
             PositionShips(shipposgrid,ships)
             PrintBoard2(shipposgrid)

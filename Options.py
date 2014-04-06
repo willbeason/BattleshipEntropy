@@ -1,4 +1,4 @@
-options = {'ships':[2,3,3,4,5]}
+options = {'ships':[5,4,3,3,2]}
 
 def PrintOptions():
     print("\n")
